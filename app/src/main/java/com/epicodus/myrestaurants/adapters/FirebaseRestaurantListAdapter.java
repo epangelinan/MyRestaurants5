@@ -25,8 +25,8 @@ import java.util.Collections;
 public class FirebaseRestaurantListAdapter extends FirebaseRecyclerAdapter<Restaurant, FirebaseRestaurantViewHolder>  implements ItemTouchHelperAdapter {
     private DatabaseReference mRef;
     private OnStartDragListener mOnStartDragListener;
-    private Context mContext;
     private ChildEventListener mChildEventListener;
+    private Context mContext;
     private ArrayList<Restaurant> mRestaurants = new ArrayList<>();
 
     public FirebaseRestaurantListAdapter(Class<Restaurant> modelClass, int modelLayout,
@@ -69,7 +69,9 @@ public class FirebaseRestaurantListAdapter extends FirebaseRecyclerAdapter<Resta
     @Override
     protected void populateViewHolder(final FirebaseRestaurantViewHolder viewHolder, Restaurant model, int position) {
         viewHolder.bindRestaurant(model);
+
         viewHolder.mRestaurantImageView.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
@@ -77,6 +79,7 @@ public class FirebaseRestaurantListAdapter extends FirebaseRecyclerAdapter<Resta
                 }
                 return false;
             }
+
         });
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

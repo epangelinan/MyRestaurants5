@@ -24,7 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SavedRestaurantListActivity extends AppCompatActivity implements OnStartDragListener {
-    private DatabaseReference mRestaurantReference;
+  //  private DatabaseReference mRestaurantReference;
     private FirebaseRestaurantListAdapter mFirebaseAdapter;
     private ItemTouchHelper mItemTouchHelper;
 

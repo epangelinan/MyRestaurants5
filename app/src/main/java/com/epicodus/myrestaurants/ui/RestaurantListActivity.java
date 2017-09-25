@@ -34,11 +34,11 @@ public class RestaurantListActivity extends AppCompatActivity {
     private SharedPreferences.Editor mEditor;
     private String mRecentAddress;
 
-    public static final String TAG = RestaurantListActivity.class.getSimpleName();
+  //  public static final String TAG = RestaurantListActivity.class.getSimpleName();
 
     @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
-    private RestaurantListAdapter mAdapter;
 
+    private RestaurantListAdapter mAdapter;
     public ArrayList<Restaurant> mRestaurants = new ArrayList<>();
 
     @Override
