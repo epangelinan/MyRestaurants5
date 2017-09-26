@@ -2,6 +2,9 @@ package com.epicodus.myrestaurants.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.epicodus.myrestaurants.Constants;
 import com.epicodus.myrestaurants.R;
 import com.epicodus.myrestaurants.models.Restaurant;
 import com.epicodus.myrestaurants.ui.RestaurantDetailActivity;
+import com.epicodus.myrestaurants.ui.RestaurantDetailFragment;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -65,6 +70,8 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             super(itemView);
             ButterKnife.bind(this, itemView);
 
+            mContext = itemView.getContext();
+
             // Determines the current orientation of the device:
             mOrientation = itemView.getResources().getConfiguration().orientation;
 
@@ -74,7 +81,6 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 createDetailFragment(0);
             }
 
-            mContext = itemView.getContext();
             itemView.setOnClickListener(this);
         }
 
@@ -90,6 +96,18 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             mRatingTextView.setText("Rating: " + restaurant.getRating() + "/5");
         }
 
+        // Takes position of restaurant in list as parameter:
+        private void createDetailFragment(int position) {
+            // Creates new RestaurantDetailFragment with the given position:
+            RestaurantDetailFragment detailFragment = RestaurantDetailFragment.newInstance(mRestaurants, position);
+            // Gathers necessary components to replace the FrameLayout in the layout with the RestaurantDetailFragment:
+            FragmentTransaction ft = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+            //  Replaces the FrameLayout with the RestaurantDetailFragment:
+            ft.replace(R.id.restaurantDetailContainer, detailFragment);
+            // Commits these changes:
+            ft.commit();
+        }
+
         @Override
         public void onClick(View v) {
             // Determines the position of the restaurant clicked:
@@ -103,18 +121,6 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
                 intent.putExtra(Constants.EXTRA_KEY_RESTAURANTS, Parcels.wrap(mRestaurants));
                 mContext.startActivity(intent);
             }
-        }
-
-        // Takes position of restaurant in list as parameter:
-        private void createDetailFragment(int position) {
-            // Creates new RestaurantDetailFragment with the given position:
-            RestaurantDetailFragment detailFragment = RestaurantDetailFragment.newInstance(mRestaurants, position);
-            // Gathers necessary components to replace the FrameLayout in the layout with the RestaurantDetailFragment:
-            FragmentTransaction ft = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
-            //  Replaces the FrameLayout with the RestaurantDetailFragment:
-            ft.replace(R.id.restaurantDetailContainer, detailFragment);
-            // Commits these changes:
-            ft.commit();
         }
     }
 }
