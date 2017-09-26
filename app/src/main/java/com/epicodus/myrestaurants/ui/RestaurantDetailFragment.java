@@ -31,6 +31,10 @@ import butterknife.ButterKnife;
 public class RestaurantDetailFragment extends Fragment implements View.OnClickListener {
     private static final int MAX_WIDTH = 400;
     private static final int MAX_HEIGHT = 300;
+    private Restaurant mRestaurant;
+    private ArrayList<Restaurant> mRestaurants;
+    private int mPosition;
+    private String mSource;
 
     @Bind(R.id.restaurantImageView) ImageView mImageLabel;
     @Bind(R.id.restaurantNameTextView) TextView mNameLabel;
@@ -41,16 +45,13 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
     @Bind(R.id.addressTextView) TextView mAddressLabel;
     @Bind(R.id.saveRestaurantButton) TextView mSaveRestaurantButton;
 
-    private Restaurant mRestaurant;
-    private ArrayList<Restaurant> mRestaurants;
-    private int mPosition;
-
-    public static RestaurantDetailFragment newInstance(ArrayList<Restaurant> restaurants, Integer position) {
+    public static RestaurantDetailFragment newInstance(ArrayList<Restaurant> restaurants, Integer position, String source) {
         RestaurantDetailFragment restaurantDetailFragment = new RestaurantDetailFragment();
         Bundle args = new Bundle();
 
         args.putParcelable(Constants.EXTRA_KEY_RESTAURANTS, Parcels.wrap(restaurants));
         args.putInt(Constants.EXTRA_KEY_POSITION, position);
+        args.putString(Constants.KEY_SOURCE, source);
 
         restaurantDetailFragment.setArguments(args);
         return restaurantDetailFragment;
@@ -62,12 +63,22 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
         mRestaurants = Parcels.unwrap(getArguments().getParcelable(Constants.EXTRA_KEY_RESTAURANTS));
         mPosition = getArguments().getInt(Constants.EXTRA_KEY_POSITION);
         mRestaurant = mRestaurants.get(mPosition);
+
+        mSource = getArguments().getString(Constants.KEY_SOURCE);
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
         ButterKnife.bind(this, view);
+
+        if (mSource.equals(Constants.SOURCE_SAVED)) {
+            mSaveRestaurantButton.setVisibility(View.GONE);
+        } else {
+            // This line of code should already exist. Make sure it now resides in this conditional:
+            mSaveRestaurantButton.setOnClickListener(this);
+        }
 
         Picasso.with(view.getContext())
                 .load(mRestaurant.getImageUrl())
@@ -85,7 +96,7 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
         mPhoneLabel.setOnClickListener(this);
         mAddressLabel.setOnClickListener(this);
 
-        mSaveRestaurantButton.setOnClickListener(this);
+
 
         return view;
     }
